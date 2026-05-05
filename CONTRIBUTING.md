@@ -28,6 +28,20 @@ Thanks for considering it. A few ground rules.
 
 See [README — Build from source](./README.md#build-from-source).
 
+## Running tests
+
+```bash
+swift test
+```
+
+Tests that touch the system microphone (currently a single smoke test in `AudioCaptureTests`) trigger the macOS TCC permission prompt the first time. To skip them entirely — useful in headless CI or when you don't want the prompt:
+
+```bash
+MURMUR_SKIP_AUDIO_HARDWARE=1 swift test
+```
+
+`xcode-select` must point at full Xcode (not Command Line Tools alone) for `swift test` to find the `XCTest` and `Testing` modules — see README's "Build from source" for the one-time setup.
+
 ## Code style
 
 - Swift 6 strict concurrency. No `@unchecked Sendable` without a comment explaining why.
