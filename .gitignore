@@ -1,0 +1,86 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+*.xcodeproj/
+.swiftpm/
+
+# Python (prototype/)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Models — too large for git, downloaded on first use
+models/
+*.mlmodelc/
+*.mlpackage/
+*.gguf
+*.safetensors
+*.bin
+
+# Audio test fixtures
+prototype/audio/
+*.wav
+*.mp3
+*.m4a
+
+# Eval artifacts
+eval_results/
+*.csv
+!docs/sample_results.csv
+
+# Sparkle
+*.dmg
+*.zip
+sparkle/private/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+.cursor/
+
+# Secrets — paranoid defaults
+*.p12
+*.cer
+*.key
+.env
+.env.local
+notarization-creds.json
