@@ -6,7 +6,7 @@ Order is intentional. Don't reorder without updating dependencies in the plans.
 
 ## Milestone v0.1 — Swift skeleton
 
-- [ ] **swift-package-skeleton** — `Package.swift` defining a macOS 14 executable target `Murmur` and a test target. Minimal `main.swift` that prints version and exits. `swift build` clean. `swift test` runs (asserting version constant). `.gitignore` tuned for Swift artifacts.
+- [x] **swift-package-skeleton** — `Package.swift` defining a macOS 14 executable target `Murmur` and a test target. Minimal `main.swift` that prints version and exits. `swift build` clean. `swift test` runs (asserting version constant). `.gitignore` tuned for Swift artifacts. _Shipped in #1 (8ca3dc6) — `MurmurCore` library + thin executable, swift-testing, `com.archithrapaka.murmur` bundle id locked, 3 tests passing._
 - [ ] **whisperkit-dependency-and-model-cache** — Add WhisperKit to `Package.swift`. Implement `ModelCache` helper that resolves and ensures `~/Library/Application Support/Murmur/Models/` exists. Unit test for path resolution and idempotent creation.
 - [ ] **audio-capture-pipeline** — `AudioCapture` class wrapping `AVAudioEngine` at 16 kHz mono float32, ring-buffered, `start()`/`stop() -> [Float]` API. Tests using a fixture WAV that round-trip through the buffer.
 - [ ] **silero-vad-trim** — `SileroVAD` wrapper around the CoreML port. `trim(samples) -> [Float]` removes leading/trailing silence. Tests with silence-only, speech-only, and silence-bracketed fixtures.
