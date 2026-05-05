@@ -143,12 +143,18 @@ Cloud-based tools cannot beat this on a typical home connection — they spend 1
 
 ## Build from source
 
+**Prerequisites:** Apple Silicon Mac, macOS 14+, Xcode 16+, Swift 6 toolchain. `xcode-select -p` must point at the full Xcode (not just Command Line Tools — XCTest and swift-testing live in Xcode):
+
 ```bash
-# Prerequisites: Xcode 16+, Swift 6, Apple Silicon Mac
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+```bash
 git clone https://github.com/humancto/murmur.git
 cd murmur
-swift build -c release
-open .build/release/Murmur.app
+swift build              # build the executable target
+swift test               # run the test suite
+swift run Murmur         # run the executable (prints version, exits)
 ```
 
 Or open in Xcode:
@@ -157,7 +163,9 @@ Or open in Xcode:
 xed .
 ```
 
-Models are downloaded from Cloudflare R2 on first launch (~3.5 GB, one-time). They live in `~/Library/Application Support/Murmur/Models/` and are SHA-verified against a signed manifest in this repo.
+> The repo is currently a CLI executable scaffold. The bundled `.app` lands in a later roadmap item (`floating-hud-scaffold` / `menu-bar-mic-indicator`). Until then `swift run` is the way.
+
+Once shipping, models will download from Cloudflare R2 on first launch (~3.5 GB, one-time) into `~/Library/Application Support/Murmur/Models/` and be SHA-verified against a signed manifest in this repo.
 
 ## Privacy
 
