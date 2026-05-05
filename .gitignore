@@ -28,9 +28,11 @@ xcuserdata/
 .build/
 Packages/
 Package.pins
-Package.resolved
 *.xcodeproj/
 .swiftpm/
+
+# Note: Package.resolved IS committed — Murmur ships as a distributed app
+# and we want reproducible dependency versions across contributors.
 
 # Python (prototype/)
 __pycache__/
