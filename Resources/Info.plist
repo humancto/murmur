@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>Murmur</string>
+    <key>CFBundleDisplayName</key>
+    <string>Murmur</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.archithrapaka.murmur</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0-dev</string>
+    <key>CFBundleExecutable</key>
+    <string>Murmur</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
+    <!-- Menu-bar agent: no Dock icon, doesn't appear in Cmd+Tab. -->
+    <key>LSUIElement</key>
+    <true/>
+    <!-- TCC usage strings — without these the OS aborts on first request. -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Murmur needs microphone access to capture your dictation. Audio is processed entirely on this Mac and never leaves your device.</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Murmur uses Accessibility to type the transcribed text into the focused text field of any app.</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2026 Archith Rapaka. MIT licensed.</string>
+</dict>
+</plist>

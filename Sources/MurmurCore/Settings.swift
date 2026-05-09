@@ -28,22 +28,28 @@ public struct Settings: Codable, Sendable, Equatable {
     /// long-form dictation needs.
     public var captureMaxDurationSec: Double
 
+    /// Whether the user has completed first-run onboarding (mic +
+    /// accessibility + hotkey binding). Persisted so subsequent launches
+    /// skip the modal flow.
+    public var didCompleteOnboarding: Bool
+
     public init(
         vocabulary: [String] = [],
         playAudioCues: Bool = false,
-        captureMaxDurationSec: Double = 60
+        captureMaxDurationSec: Double = 60,
+        didCompleteOnboarding: Bool = false
     ) {
         self.vocabulary = vocabulary
         self.playAudioCues = playAudioCues
         self.captureMaxDurationSec = captureMaxDurationSec
+        self.didCompleteOnboarding = didCompleteOnboarding
     }
 
     // Manual decoding so a Settings JSON written by an older app build
     // (with fewer fields) decodes successfully against this newer struct
-    // — every missing field falls back to its default. Forward-compatible
-    // schema evolution without a migration step. apple-expert's call.
+    // — every missing field falls back to its default.
     private enum CodingKeys: String, CodingKey {
-        case vocabulary, playAudioCues, captureMaxDurationSec
+        case vocabulary, playAudioCues, captureMaxDurationSec, didCompleteOnboarding
     }
 
     public init(from decoder: any Decoder) throws {
@@ -52,6 +58,7 @@ public struct Settings: Codable, Sendable, Equatable {
         self.vocabulary = (try c.decodeIfPresent([String].self, forKey: .vocabulary)) ?? defaults.vocabulary
         self.playAudioCues = (try c.decodeIfPresent(Bool.self, forKey: .playAudioCues)) ?? defaults.playAudioCues
         self.captureMaxDurationSec = (try c.decodeIfPresent(Double.self, forKey: .captureMaxDurationSec)) ?? defaults.captureMaxDurationSec
+        self.didCompleteOnboarding = (try c.decodeIfPresent(Bool.self, forKey: .didCompleteOnboarding)) ?? defaults.didCompleteOnboarding
     }
 }
 
