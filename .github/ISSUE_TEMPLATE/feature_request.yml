@@ -1,0 +1,41 @@
+name: Feature request
+description: Suggest something Murmur should do
+title: "[feature]: "
+labels: [enhancement, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Murmur is opinionated. Some features are explicit non-goals (cloud anything, telemetry, subscription, payment). Read [CONTRIBUTING.md](../CONTRIBUTING.md) before filing — it'll save us both time.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the use case, not the solution. "I want X" instead of "you should add a button that does X".
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would the ideal solution look like?
+      description: If you have one. Otherwise leave blank — we may have a better idea.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What workarounds are you using today?
+      description: Helps us judge how painful the gap is.
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This feature does NOT require sending data off the user's Mac.
+          required: true
+        - label: This feature does NOT introduce telemetry.
+          required: true
+        - label: This feature does NOT require an account or subscription.
+          required: true

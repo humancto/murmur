@@ -4,10 +4,11 @@
 
 **Private, local-only Mac dictation. Built for accents. Free forever.**
 
+[![CI](https://github.com/humancto/murmur/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/humancto/murmur/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg?style=flat-square)](./LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%2014%2B-black?style=flat-square)](#requirements)
 [![Apple Silicon](https://img.shields.io/badge/Apple%20Silicon-required-black?style=flat-square)](#requirements)
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange?style=flat-square)](#roadmap)
+[![Latest release](https://img.shields.io/github/v/release/humancto/murmur?include_prereleases&style=flat-square)](https://github.com/humancto/murmur/releases/latest)
 
 A free, open-source alternative to Wispr Flow that runs entirely on your Mac. No cloud. No account. No subscription. No telemetry.
 

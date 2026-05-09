@@ -1,0 +1,101 @@
+name: Bug report
+description: Something doesn't work as expected
+title: "[bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. The more specific you can be, the faster we can fix it.
+
+        **Before filing:** check if your issue is already in the [open issues](../issues).
+
+  - type: input
+    id: version
+    attributes:
+      label: Murmur version
+      description: From the menu bar — "Murmur X.Y.Z" — or the build commit if you built from source.
+      placeholder: v0.1.0-demo
+    validations:
+      required: true
+
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      description: From System Settings → General → About.
+      placeholder: 14.5
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: Mac model + RAM
+      placeholder: M2 Pro · 16 GB
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected vs what actually happened.
+      placeholder: |
+        I held my hotkey and spoke "hello world".
+        I expected "hello world" to appear in TextEdit.
+        Instead, nothing appeared.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps that someone else can follow.
+      placeholder: |
+        1. Open TextEdit
+        2. Click into the document
+        3. Hold F19
+        4. Speak "hello world"
+        5. Release F19
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs (optional but very helpful)
+      description: |
+        Run `log show --predicate 'subsystem == "dev.murmur"' --last 10m` in Terminal and paste the relevant tail. Redact anything personal.
+      render: shell
+
+  - type: dropdown
+    id: target_app
+    attributes:
+      label: Which app were you dictating into?
+      options:
+        - TextEdit
+        - Notes
+        - Mail
+        - Xcode
+        - Messages
+        - Pages
+        - Terminal
+        - iTerm2
+        - VS Code / Cursor
+        - Slack
+        - Notion
+        - Discord
+        - ChatGPT / Claude desktop
+        - Linear
+        - Safari / Chrome / browser text field
+        - Other (please specify in "What happened")
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: I have NOT included audio recordings or full transcripts of personal content in this report.
+          required: true
