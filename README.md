@@ -106,12 +106,20 @@ Cloud-based tools cannot beat this on a typical home connection — they spend 1
 
 ## Roadmap
 
-**v0.1 — Swift skeleton** (in progress)
+**v0.1 — Swift skeleton** (in progress · 3 of 10 items shipped)
 
-- WhisperKit integration
-- Hotkey + menu bar + recording indicator
-- Clipboard injection path
-- Floating HUD scaffold
+- [x] Swift package skeleton — `MurmurCore` library + `Murmur` executable, swift-testing, strict concurrency ([#1](https://github.com/humancto/murmur/pull/1))
+- [x] WhisperKit dependency + `ModelCache` ([#2](https://github.com/humancto/murmur/pull/2))
+- [x] Audio capture pipeline — `Resampler` + `AudioCapture` actor with streaming `AVAudioConverter` ([#3](https://github.com/humancto/murmur/pull/3))
+- [ ] Silence trimming (energy-based VAD)
+- [ ] Hotkey + settings (`KeyboardShortcuts`)
+- [ ] Clipboard injection path with secure-input pre-flight
+- [ ] AXUIElement opportunistic insertion (allowlist)
+- [ ] Floating HUD scaffold
+- [ ] Menu bar mic indicator
+- [ ] End-to-end wiring
+
+Track progress on the [open ROADMAP.md](./ROADMAP.md). Every item lands as one squash-merged PR after an apple-expert plan-review and final-diff-review loop — see the merged-PR list on the [landing page](https://humancto.github.io/murmur/).
 
 **v0.5 — Functional**
 

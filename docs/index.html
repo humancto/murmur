@@ -719,6 +719,128 @@
   /* Reveal on scroll */
   [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
   [data-reveal].in { opacity: 1; transform: translateY(0); }
+
+  /* ── Build progress (roadmap inline) ──────────────────── */
+  .progress {
+    margin-top: 22px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--surface);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .progress-bar > span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, #c69a4d 100%);
+    border-radius: 999px;
+    transition: width 800ms var(--ease);
+  }
+  .progress-label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .progress-label strong { color: var(--text); font-weight: 500; }
+
+  /* ── Built in public — PR log ─────────────────────────── */
+  .pr-log {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .pr-row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto auto;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    transition: background 200ms var(--ease);
+  }
+  .pr-row:last-child { border-bottom: none; }
+  .pr-row:hover { background: var(--surface-2); }
+  .pr-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  .pr-row .title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+  }
+  .pr-row .title small {
+    display: block;
+    font-family: var(--font-text);
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    letter-spacing: 0;
+  }
+  .pr-row .verdict {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(127, 195, 128, 0.3);
+    color: var(--positive);
+    background: rgba(127, 195, 128, 0.08);
+  }
+  .pr-row .tests {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .pr-row a.title { color: var(--text); text-decoration: none; }
+
+  .reviewer-line {
+    margin-top: 36px;
+    padding: 22px 24px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .reviewer-line strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .reviewer-line code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 820px) {
+    .pr-row { grid-template-columns: auto 1fr; gap: 10px; }
+    .pr-row .verdict, .pr-row .tests { grid-column: 2 / -1; padding-top: 4px; }
+  }
 </style>
 </head>
 <body>
@@ -970,10 +1092,15 @@
     <p class="pull">Three weekends<br/>to v1.</p>
     <p class="pull-attrib">In public · on GitHub</p>
 
-    <div class="roadmap" style="margin-top:48px">
+    <div class="progress" aria-label="v0.1 progress">
+      <div class="progress-bar"><span style="width: 30%"></span></div>
+      <div class="progress-label"><strong>3 of 10</strong> v0.1 items shipped</div>
+    </div>
+
+    <div class="roadmap" style="margin-top:32px">
       <div class="milestone">
         <div class="ver">v0.1</div>
-        <div class="what">Swift skeleton<small>WhisperKit integration · hotkey · menu bar · clipboard injection · floating HUD scaffold.</small></div>
+        <div class="what">Swift skeleton<small>Package + library + executable · WhisperKit dependency · ModelCache · AVAudioEngine capture · streaming Resampler. <em>Hotkey · HUD · injection · end-to-end wiring still ahead.</em></small></div>
         <div class="when now">In progress</div>
       </div>
       <div class="milestone">
@@ -992,6 +1119,52 @@
         <div class="when">Later</div>
       </div>
     </div>
+  </div>
+</section>
+
+<section data-reveal>
+  <div class="wrap">
+    <div class="label">08 — Built in public</div>
+    <p class="pull">Every PR.<br/>Reviewed by an expert.</p>
+    <p class="pull-attrib">Architecture · diff · tests</p>
+
+    <div class="reviewer-line" style="margin-top:36px">
+      Murmur is built one merged PR at a time, on a strict ROADMAP-driven loop. Each item is planned, the plan is reviewed adversarially by an <code>apple-expert</code> agent, the branch is implemented with atomic commits and tests, the diff goes through a second adversarial review, and only an <strong>APPROVE</strong> verdict on the actual merged diff lets it land. No exceptions, no exemptions.
+    </div>
+
+    <div class="pr-log" style="margin-top:28px">
+      <div class="pr-row">
+        <div class="pr-num">#1</div>
+        <a class="title" href="https://github.com/humancto/murmur/pull/1" rel="noopener">
+          Swift package skeleton — MurmurCore + Murmur
+          <small>SPM v6 · strict concurrency · bundle id locked · swift-testing.</small>
+        </a>
+        <div class="verdict">Approve</div>
+        <div class="tests">3 tests</div>
+      </div>
+      <div class="pr-row">
+        <div class="pr-num">#2</div>
+        <a class="title" href="https://github.com/humancto/murmur/pull/2" rel="noopener">
+          WhisperKit dependency + ModelCache
+          <small>argmax-oss-swift v1.0.0 · Package.resolved committed · presence-check API.</small>
+        </a>
+        <div class="verdict">Approve</div>
+        <div class="tests">9 tests</div>
+      </div>
+      <div class="pr-row">
+        <div class="pr-num">#3</div>
+        <a class="title" href="https://github.com/humancto/murmur/pull/3" rel="noopener">
+          Audio capture pipeline
+          <small>Resampler + AudioCapture actor · streaming AVAudioConverter · 60 s cap · @unchecked Sendable converter discipline.</small>
+        </a>
+        <div class="verdict">Approve</div>
+        <div class="tests">17 tests</div>
+      </div>
+    </div>
+
+    <p class="reviewer-line" style="margin-top:28px">
+      Each item lands as one squash-merged PR. Every commit is small, every diff is reviewed, every test runs locally before review. The full <a href="https://github.com/humancto/murmur/blob/main/.planning/architecture.plan.md" rel="noopener" style="border-bottom:1px solid var(--border-strong)">architecture plan</a> and per-item <a href="https://github.com/humancto/murmur/tree/main/.planning" rel="noopener" style="border-bottom:1px solid var(--border-strong)">item plans</a> live in the repo — including the apple-expert revisions captured at the bottom of each plan, in their own words.
+    </p>
   </div>
 </section>
 
