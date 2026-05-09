@@ -19,11 +19,19 @@ Order is intentional. Don't reorder without updating dependencies in the plans.
 
 ## Milestone v0.5 — Functional
 
-(filled in after v0.1 ships)
+The "feels like Wispr Flow" milestone. v0.1 transcribes; v0.5 cleans up the transcript and gives the user real control. Architecture-plan §2.2 cleanup pass + §9.4 llama.cpp + the vocabulary/settings UX that's been struct-only.
+
+- [ ] **llm-cleanup-pass** — Add `mattt/llama.swift` SPM dependency. Implement `LlamaCppCleaner: Cleaner` actor wrapping a long-lived `llama_context` over a Qwen2.5-3B-Instruct Q4_K_M model. Strict architectural-plan §2.2 prompt: fix punctuation, remove disfluencies, do not rephrase, T=0, output capped at 1.5× input tokens. Confidence-based skip per §9.8 (skip when Whisper's avg log-prob > -0.3). Settings toggle. Integrated into `DictationCoordinator` between `transcribe` and `inject`. XPC isolation deferred to v1.0.
+- [ ] **first-run-model-download-ui** — SwiftUI window with progress bars for both Whisper (`small.en`, ~480 MB) and Qwen (3B Q4, ~2 GB). Resumable. SHA-256 verified against a manifest committed to the repo. Replace the menu-bar-icon "loading" state with this.
+- [ ] **settings-window** — SwiftUI Settings scene: vocabulary editor (multi-line text), cleanup toggle, audio cues toggle, max capture duration slider, hotkey rebinder. `@MainActor` SwiftUI window backed by `Settings` + `SettingsStore`.
+- [ ] **audio-cues** — Implement the tick/tock sounds bound to `Settings.playAudioCues`. `AVAudioPlayer` + small bundled WAVs (or system sounds via `NSSound`).
+- [ ] **vocabulary-prompt-eval** — Smoke-test that the existing `initialPromptProvider` plumbing actually delivers the vocabulary list to Whisper (the wiring landed in PR #8 but was never validated end-to-end). Add a unit test using the `Transcribing` stub that asserts the prompt was passed.
 
 ## Milestone v1.0 — Polished release
 
-(filled in after v0.5 ships)
+## Milestone v1.0 — Polished release
+
+(filled in after v0.5 ships — Sparkle auto-update, Developer ID + notarization, DMG packaging, Homebrew cask, accent-eval suite)
 
 ## Post-v1
 
