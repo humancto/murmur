@@ -37,6 +37,7 @@ public actor DictationCoordinator {
     private let capture: AudioCapture
     private let vad: VAD
     private let transcriber: any Transcribing
+    private let cleaner: (any Cleaner)?
     private let primaryInjector: any TextInjecting
     private let fallbackInjector: any TextInjecting
     private weak var hud: (any DictationHUDPresenting)?
@@ -48,6 +49,7 @@ public actor DictationCoordinator {
         capture: AudioCapture,
         vad: VAD = VAD(),
         transcriber: any Transcribing,
+        cleaner: (any Cleaner)? = nil,
         primaryInjector: any TextInjecting,
         fallbackInjector: any TextInjecting,
         hud: (any DictationHUDPresenting)?,
@@ -56,6 +58,7 @@ public actor DictationCoordinator {
         self.capture = capture
         self.vad = vad
         self.transcriber = transcriber
+        self.cleaner = cleaner
         self.primaryInjector = primaryInjector
         self.fallbackInjector = fallbackInjector
         self.hud = hud
@@ -103,7 +106,7 @@ public actor DictationCoordinator {
             return
         }
 
-        let text: String
+        var text: String
         do {
             text = try await transcriber.transcribe(
                 samples: trimmed,
@@ -122,6 +125,22 @@ public actor DictationCoordinator {
             state = .idle
             await hud?.update(state: .idle)
             return
+        }
+
+        // Optional cleanup pass between transcribe and inject.
+        // Per Cleaner protocol contract: the cleaner is responsible for
+        // its own confidence/length skip; we just route text through it
+        // and fall through to raw on any throw. Cleanup never gates
+        // injection — better to insert raw transcription than nothing.
+        if let cleaner {
+            // whisperLogProb is nil for v0.5 first cut; threading the
+            // real value through `Transcribing` is the v0.5.1 follow-up.
+            do {
+                text = try await cleaner.clean(text: text, whisperLogProb: nil)
+            } catch {
+                Self.log.error("Cleanup failed; using raw: \(String(describing: error), privacy: .public)")
+                // text unchanged — fall through with the raw transcription
+            }
         }
 
         // Try primary (AX) → fallback (clipboard) on miss/throw.

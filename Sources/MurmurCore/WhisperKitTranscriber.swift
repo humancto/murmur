@@ -46,12 +46,12 @@ public actor WhisperKitTranscriber: Transcribing {
             await self?.assignPipe(loaded)
         }
         loadTask = task
-        do {
-            try await task.value
-        } catch {
-            loadTask = nil
-            throw error
-        }
+        // Clear the load task on both success AND failure. Earlier code
+        // only nilled on throw; on success the completed Task lingered
+        // as actor state forever, pinning memory. apple-expert flagged
+        // this as a future-blocker for v0.5.1 idle-unload work.
+        defer { self.loadTask = nil }
+        try await task.value
     }
 
     private func assignPipe(_ pipe: WhisperKit) {
