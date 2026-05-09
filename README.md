@@ -149,31 +149,58 @@ Track progress on the [open ROADMAP.md](./ROADMAP.md). Every item lands as one s
 
 ---
 
-## Build from source
+## Build and run
 
-**Prerequisites:** Apple Silicon Mac, macOS 14+, Xcode 16+, Swift 6 toolchain. `xcode-select -p` must point at the full Xcode (not just Command Line Tools — XCTest and swift-testing live in Xcode):
+**Prerequisites:** Apple Silicon Mac, macOS 14+, Xcode 16+, Swift 6 toolchain. `xcode-select -p` must point at the full Xcode (not Command Line Tools):
 
 ```bash
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
 
+Build the `.app` bundle and launch:
+
 ```bash
 git clone https://github.com/humancto/murmur.git
 cd murmur
-swift build              # build the executable target
-swift test               # run the test suite
-swift run Murmur         # run the executable (prints version, exits)
+./scripts/make-app.sh
+open ./build/Murmur.app
 ```
 
-Or open in Xcode:
+> **Don't run `swift run Murmur` directly** — without an `Info.plist`, `NSMicrophoneUsageDescription` is missing (mic prompt crashes), `LSUIElement` is missing (Dock icon flashes), and TCC keys consent off the per-binary hash so accessibility trust gets re-prompted on every build. Always go through `make-app.sh`.
+
+### First launch
+
+Murmur runs as a menu-bar agent (no Dock icon). On first launch it walks you through:
+
+1. **Microphone permission** — needed to capture your voice
+2. **Accessibility permission** — needed to type into other apps
+3. **Hotkey binding** — pick the key combo you'll hold to dictate
+
+After onboarding, hold your bound hotkey, speak, release. The text appears in your focused field. Click the menu-bar mic icon to rebind your hotkey or quit.
+
+### Tests
 
 ```bash
-xed .
+swift test
 ```
 
-> The repo is currently a CLI executable scaffold. The bundled `.app` lands in a later roadmap item (`floating-hud-scaffold` / `menu-bar-mic-indicator`). Until then `swift run` is the way.
+Tests that touch the system microphone (a single smoke test) trigger the macOS TCC prompt the first time. To skip them in headless CI:
 
-Once shipping, models will download from Cloudflare R2 on first launch (~3.5 GB, one-time) into `~/Library/Application Support/Murmur/Models/` and be SHA-verified against a signed manifest in this repo.
+```bash
+MURMUR_SKIP_AUDIO_HARDWARE=1 swift test
+```
+
+### What's currently in v0.1
+
+- WhisperKit (`small.en` model, ~480 MB downloaded on first launch into `~/Library/Application Support/Murmur/Models/`) for transcription
+- Energy-based VAD silence trim (Silero is a v0.5 upgrade)
+- AXUIElement direct insertion on a small allowlist (TextEdit, Mail, Xcode, Messages, Pages); clipboard-paste fallback everywhere else
+- Floating HUD with breathing waveform during recording
+- No LLM cleanup pass yet — Whisper output goes through verbatim. Cleanup lives in v0.5 via llama.cpp + XPC.
+
+### Distribution
+
+The build script ad-hoc signs the bundle so Gatekeeper doesn't outright refuse to launch on first run. For real distribution (signed + notarized DMG), see [`docs/DISTRIBUTION.md`](./docs/DISTRIBUTION.md) (coming with v1.0).
 
 ## Privacy
 
