@@ -20,6 +20,10 @@ let package = Package(
         // We pull the `WhisperKit` product specifically — the umbrella also
         // includes TTSKit/SpeakerKit which we don't use yet.
         .package(url: "https://github.com/argmaxinc/argmax-oss-swift.git", from: "1.0.0"),
+        // KeyboardShortcuts: SwiftUI-native global hotkey library.
+        // v1.10.0 ships on swift-tools-version:5.7 — compatible with
+        // our 6.0 manifest. Used by Murmur for the push-to-talk binding.
+        .package(url: "https://github.com/sindresorhus/KeyboardShortcuts.git", from: "1.10.0"),
     ],
     targets: [
         .executableTarget(
@@ -32,6 +36,7 @@ let package = Package(
             name: "MurmurCore",
             dependencies: [
                 .product(name: "WhisperKit", package: "argmax-oss-swift"),
+                .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts"),
             ],
             path: "Sources/MurmurCore",
             swiftSettings: swiftSettings
