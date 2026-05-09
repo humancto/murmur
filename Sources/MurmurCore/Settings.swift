@@ -33,23 +33,31 @@ public struct Settings: Codable, Sendable, Equatable {
     /// skip the modal flow.
     public var didCompleteOnboarding: Bool
 
+    /// LLM cleanup pass enabled. Off by default in v0.5 — users get a
+    /// working transcription tool first, then opt in to cleanup. Once
+    /// real-world dogfooding validates the prompt doesn't drift on
+    /// accented English, the v0.5.1 release flips this to true by default.
+    public var llmCleanupEnabled: Bool
+
     public init(
         vocabulary: [String] = [],
         playAudioCues: Bool = false,
         captureMaxDurationSec: Double = 60,
-        didCompleteOnboarding: Bool = false
+        didCompleteOnboarding: Bool = false,
+        llmCleanupEnabled: Bool = false
     ) {
         self.vocabulary = vocabulary
         self.playAudioCues = playAudioCues
         self.captureMaxDurationSec = captureMaxDurationSec
         self.didCompleteOnboarding = didCompleteOnboarding
+        self.llmCleanupEnabled = llmCleanupEnabled
     }
 
     // Manual decoding so a Settings JSON written by an older app build
     // (with fewer fields) decodes successfully against this newer struct
     // — every missing field falls back to its default.
     private enum CodingKeys: String, CodingKey {
-        case vocabulary, playAudioCues, captureMaxDurationSec, didCompleteOnboarding
+        case vocabulary, playAudioCues, captureMaxDurationSec, didCompleteOnboarding, llmCleanupEnabled
     }
 
     public init(from decoder: any Decoder) throws {
@@ -59,6 +67,7 @@ public struct Settings: Codable, Sendable, Equatable {
         self.playAudioCues = (try c.decodeIfPresent(Bool.self, forKey: .playAudioCues)) ?? defaults.playAudioCues
         self.captureMaxDurationSec = (try c.decodeIfPresent(Double.self, forKey: .captureMaxDurationSec)) ?? defaults.captureMaxDurationSec
         self.didCompleteOnboarding = (try c.decodeIfPresent(Bool.self, forKey: .didCompleteOnboarding)) ?? defaults.didCompleteOnboarding
+        self.llmCleanupEnabled = (try c.decodeIfPresent(Bool.self, forKey: .llmCleanupEnabled)) ?? defaults.llmCleanupEnabled
     }
 }
 

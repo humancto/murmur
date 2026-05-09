@@ -12,20 +12,37 @@ struct SettingsTests {
         return (suite, name)
     }
 
-    @Test("default Settings has empty vocabulary, audio cues off, 60s cap")
+    @Test("default Settings has empty vocabulary, audio cues off, 60s cap, cleanup off, onboarding incomplete")
     func defaultSettingsAreSensible() {
         let s = Settings()
         #expect(s.vocabulary.isEmpty)
         #expect(s.playAudioCues == false)
         #expect(s.captureMaxDurationSec == 60)
+        #expect(s.didCompleteOnboarding == false)
+        #expect(s.llmCleanupEnabled == false)
     }
 
-    @Test("Codable round-trip preserves equality")
+    @Test("decoding payload missing llmCleanupEnabled defaults to false")
+    func decodeMissingLLMFieldFallsBackToDefault() throws {
+        // Simulate a v0.1-era app build's persisted JSON, before
+        // llmCleanupEnabled was added.
+        let v01era = Data(#"{"vocabulary":["foo"],"playAudioCues":true,"captureMaxDurationSec":45,"didCompleteOnboarding":true}"#.utf8)
+        let decoded = try JSONDecoder().decode(Settings.self, from: v01era)
+        #expect(decoded.vocabulary == ["foo"])
+        #expect(decoded.playAudioCues == true)
+        #expect(decoded.captureMaxDurationSec == 45)
+        #expect(decoded.didCompleteOnboarding == true)
+        #expect(decoded.llmCleanupEnabled == false)
+    }
+
+    @Test("Codable round-trip preserves equality across all fields")
     func codableRoundTrip() throws {
         let original = Settings(
             vocabulary: ["Archith", "WhisperKit", "ANE"],
             playAudioCues: true,
-            captureMaxDurationSec: 120
+            captureMaxDurationSec: 120,
+            didCompleteOnboarding: true,
+            llmCleanupEnabled: true
         )
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Settings.self, from: data)

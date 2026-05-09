@@ -151,4 +151,40 @@ struct DictationCoordinatorTests {
         let state = await coord.currentState
         #expect(state == .idle)
     }
+
+    @Test("coordinator with no cleaner constructs cleanly")
+    func coordinatorWithoutCleaner() async {
+        // Defensive: nil cleaner is the v0.5 default. Ensure the
+        // optional flows through without forcing a stub on every caller.
+        let coord = DictationCoordinator(
+            capture: AudioCapture(),
+            transcriber: StubTranscriber(),
+            cleaner: nil,
+            primaryInjector: StubInjector(returnInserted: true),
+            fallbackInjector: StubInjector(returnInserted: false),
+            hud: nil
+        )
+        let state = await coord.currentState
+        #expect(state == .idle)
+    }
+
+    @Test("coordinator accepts a cleaner without crashing")
+    func coordinatorWithCleaner() async {
+        // Routing is exercised end-to-end in the gated hardware path
+        // (mic + transcribe + clean + inject); the unit-level guarantee
+        // here is just that the optional plumbing types check.
+        struct InertCleaner: Cleaner {
+            func clean(text: String, whisperLogProb: Float?) async throws -> String { text }
+        }
+        let coord = DictationCoordinator(
+            capture: AudioCapture(),
+            transcriber: StubTranscriber(),
+            cleaner: InertCleaner(),
+            primaryInjector: StubInjector(returnInserted: true),
+            fallbackInjector: StubInjector(returnInserted: false),
+            hud: nil
+        )
+        let state = await coord.currentState
+        #expect(state == .idle)
+    }
 }
