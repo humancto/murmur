@@ -106,12 +106,12 @@ Cloud-based tools cannot beat this on a typical home connection — they spend 1
 
 ## Roadmap
 
-**v0.1 — Swift skeleton** (in progress · 3 of 10 items shipped)
+**v0.1 — Swift skeleton** (in progress · 4 of 10 items shipped)
 
 - [x] Swift package skeleton — `MurmurCore` library + `Murmur` executable, swift-testing, strict concurrency ([#1](https://github.com/humancto/murmur/pull/1))
 - [x] WhisperKit dependency + `ModelCache` ([#2](https://github.com/humancto/murmur/pull/2))
 - [x] Audio capture pipeline — `Resampler` + `AudioCapture` actor with streaming `AVAudioConverter` ([#3](https://github.com/humancto/murmur/pull/3))
-- [ ] Silence trimming (energy-based VAD)
+- [x] Silence trimming — energy-based `VAD` (Silero deferred to v0.5) ([#4](https://github.com/humancto/murmur/pull/4))
 - [ ] Hotkey + settings (`KeyboardShortcuts`)
 - [ ] Clipboard injection path with secure-input pre-flight
 - [ ] AXUIElement opportunistic insertion (allowlist)

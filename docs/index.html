@@ -1093,14 +1093,14 @@
     <p class="pull-attrib">In public · on GitHub</p>
 
     <div class="progress" aria-label="v0.1 progress">
-      <div class="progress-bar"><span style="width: 30%"></span></div>
-      <div class="progress-label"><strong>3 of 10</strong> v0.1 items shipped</div>
+      <div class="progress-bar"><span style="width: 40%"></span></div>
+      <div class="progress-label"><strong>4 of 10</strong> v0.1 items shipped</div>
     </div>
 
     <div class="roadmap" style="margin-top:32px">
       <div class="milestone">
         <div class="ver">v0.1</div>
-        <div class="what">Swift skeleton<small>Package + library + executable · WhisperKit dependency · ModelCache · AVAudioEngine capture · streaming Resampler. <em>Hotkey · HUD · injection · end-to-end wiring still ahead.</em></small></div>
+        <div class="what">Swift skeleton<small>Package + library + executable · WhisperKit dependency · ModelCache · AVAudioEngine capture · streaming Resampler · energy-based VAD silence trim. <em>Hotkey · HUD · injection · end-to-end wiring still ahead.</em></small></div>
         <div class="when now">In progress</div>
       </div>
       <div class="milestone">
@@ -1159,6 +1159,15 @@
         </a>
         <div class="verdict">Approve</div>
         <div class="tests">17 tests</div>
+      </div>
+      <div class="pr-row">
+        <div class="pr-num">#4</div>
+        <a class="title" href="https://github.com/humancto/murmur/pull/4" rel="noopener">
+          VAD silence trim (energy-based)
+          <small>Window-RMS energy threshold · 30 ms frames · 100/200 ms lead/trail pads. Silero deferred to v0.5 — expert approved the deviation.</small>
+        </a>
+        <div class="verdict">Approve</div>
+        <div class="tests">25 tests</div>
       </div>
     </div>
 
