@@ -18,6 +18,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var menuBar: MenuBarController!
     private var hud: HUDController!
     private var coordinator: DictationCoordinator!
+    private var settingsWindow: SettingsWindowController!
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         log.info("Murmur launching (\(MurmurInfo.version, privacy: .public))")
@@ -37,8 +38,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             hud: hud,
             initialPromptProvider: initialPromptProvider
         )
+        settingsWindow = SettingsWindowController(store: settingsStore)
         menuBar = MenuBarController(
-            onBindHotkey: { [weak self] in self?.openHotkeyRecorder() },
+            onOpenSettings: { [weak self] in
+                Task { @MainActor in self?.settingsWindow.showWindow() }
+            },
             onQuit: { NSApplication.shared.terminate(nil) }
         )
         menuBar.install()
@@ -77,22 +81,4 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func openHotkeyRecorder() {
-        let alert = NSAlert()
-        alert.messageText = "Bind hotkey"
-        alert.informativeText = """
-        Press the key combo you want to hold for push-to-talk dictation.
-
-        We recommend a function key (F13–F19) or a modifier-only chord
-        like ⌃⌥. Single keys like spacebar interfere with normal typing.
-
-        Open System Settings → Keyboard if you need to look up which
-        keys are reachable on your hardware.
-        """
-        let recorder = KeyboardShortcuts.RecorderCocoa(for: .dictate)
-        recorder.frame = NSRect(x: 0, y: 0, width: 240, height: 24)
-        alert.accessoryView = recorder
-        alert.addButton(withTitle: "Done")
-        alert.runModal()
-    }
 }

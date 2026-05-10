@@ -4,16 +4,16 @@ import MurmurCore
 @MainActor
 final class MenuBarController {
 
-    private let onBindHotkey: @Sendable () -> Void
+    private let onOpenSettings: @Sendable () -> Void
     private let onQuit: @Sendable () -> Void
     private var item: NSStatusItem?
     private var modelLoading = false
 
     init(
-        onBindHotkey: @escaping @Sendable () -> Void,
+        onOpenSettings: @escaping @Sendable () -> Void,
         onQuit: @escaping @Sendable () -> Void
     ) {
-        self.onBindHotkey = onBindHotkey
+        self.onOpenSettings = onOpenSettings
         self.onQuit = onQuit
     }
 
@@ -27,7 +27,7 @@ final class MenuBarController {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Murmur \(MurmurInfo.version)", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(menuItem(title: "Bind hotkey…", action: #selector(bindHotkey)))
+        menu.addItem(menuItem(title: "Settings…", action: #selector(openSettings), key: ","))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(menuItem(title: "Quit Murmur", action: #selector(quit), key: "q"))
         // The selectors target this controller via the NSMenuItem.target wiring done below.
@@ -70,6 +70,6 @@ final class MenuBarController {
 
     // MARK: - Actions
 
-    @objc private func bindHotkey() { onBindHotkey() }
+    @objc private func openSettings() { onOpenSettings() }
     @objc private func quit() { onQuit() }
 }
