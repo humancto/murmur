@@ -65,6 +65,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let settings = settingsStore.load()
         if !settings.didCompleteOnboarding {
             await Onboarding.run(settingsStore: settingsStore)
+            // After onboarding, surface the Settings window automatically.
+            // Solves the chicken-and-egg on notch MacBook Pros where the
+            // menu-bar icon may be hidden by overflow — users can't find
+            // it to open Settings, but Settings is where they bind their
+            // hotkey. Auto-showing once after onboarding sidesteps it.
+            settingsWindow.showWindow()
         }
 
         // Eager model warm-up so the first dictation isn't slow. Surface
