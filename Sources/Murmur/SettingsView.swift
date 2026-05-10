@@ -44,13 +44,21 @@ struct SettingsView: View {
         }
         .frame(minWidth: 520, minHeight: 540)
         .background(Color(NSColor.windowBackgroundColor))
+        // Single source of truth for persistence: any field flip on the
+        // whole `Settings` struct emits to onChange. Removed the earlier
+        // per-field .onChange modifiers — those were per-field bookkeeping
+        // that was easy to forget for new fields and silently lose saves.
+        // (apple-expert PR #10 review)
+        .onChange(of: settings) { _, newValue in
+            onChange(newValue)
+        }
     }
 
     // MARK: - Sections
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("MurmurCore.Settings")
+            Text("Settings")
                 .font(.system(size: 22, weight: .semibold))
             Text("Murmur \(MurmurInfo.version) · all changes save automatically · stays on your Mac")
                 .font(.system(size: 12))
@@ -59,6 +67,9 @@ struct SettingsView: View {
     }
 
     private var hotkeySection: some View {
+        // Note: `KeyboardShortcuts.Recorder` writes directly to its own
+        // UserDefaults keys; rebinds intentionally bypass our `onChange`
+        // since the library owns hotkey persistence end-to-end.
         section(title: "Hotkey", subtitle: "Hold this combination to dictate. Release when you're done.") {
             KeyboardShortcuts.Recorder(for: .dictate)
                 .frame(maxWidth: 240, alignment: .leading)
@@ -79,7 +90,6 @@ struct SettingsView: View {
                     RoundedRectangle(cornerRadius: 6)
                         .stroke(Color.secondary.opacity(0.25), lineWidth: 0.5)
                 )
-                .onChange(of: settings.vocabulary) { _, _ in onChange(settings) }
         }
     }
 
@@ -98,7 +108,6 @@ struct SettingsView: View {
                 }
             }
             .toggleStyle(.switch)
-            .onChange(of: settings.llmCleanupEnabled) { _, _ in onChange(settings) }
         }
     }
 
@@ -114,7 +123,6 @@ struct SettingsView: View {
                     step: 5
                 )
                 .frame(maxWidth: 320)
-                .onChange(of: settings.captureMaxDurationSec) { _, _ in onChange(settings) }
 
                 Text("\(Int(settings.captureMaxDurationSec)) s")
                     .font(.system(size: 13, design: .monospaced))
@@ -131,7 +139,6 @@ struct SettingsView: View {
         ) {
             Toggle("Play audio cues", isOn: $settings.playAudioCues)
                 .toggleStyle(.switch)
-                .onChange(of: settings.playAudioCues) { _, _ in onChange(settings) }
         }
     }
 

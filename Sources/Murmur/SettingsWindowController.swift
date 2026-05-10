@@ -22,6 +22,12 @@ final class SettingsWindowController: NSObject, NSWindowDelegate {
 
     func showWindow() {
         if let existing = window {
+            // Defensive: if the user dragged the window onto a display
+            // that's since been disconnected (laptop undocked), the
+            // window will be ordered onto an off-screen frame. Re-center
+            // before showing.
+            let screensIntersect = NSScreen.screens.contains { $0.frame.intersects(existing.frame) }
+            if !screensIntersect { existing.center() }
             existing.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
             return
