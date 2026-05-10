@@ -65,11 +65,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let settings = settingsStore.load()
         if !settings.didCompleteOnboarding {
             await Onboarding.run(settingsStore: settingsStore)
-            // After onboarding, surface the Settings window automatically.
-            // Solves the chicken-and-egg on notch MacBook Pros where the
-            // menu-bar icon may be hidden by overflow — users can't find
-            // it to open Settings, but Settings is where they bind their
-            // hotkey. Auto-showing once after onboarding sidesteps it.
+        }
+
+        // Auto-open Settings whenever there's no usable hotkey binding.
+        // Trigger covers two cases:
+        //   1. First launch: onboarding ran, user may or may not have
+        //      bound a key — Settings is where they finish if they didn't.
+        //   2. Returning user with no binding (e.g., reset, upgraded
+        //      from a build where the recorder didn't stick) — without
+        //      Settings, they'd be stuck because the menu-bar icon may
+        //      be hidden by the notch on 14"/16" MacBook Pros.
+        // If a hotkey is already bound, we trust the user knows where
+        // Settings lives and don't shove it at them on every launch.
+        if KeyboardShortcuts.getShortcut(for: .dictate) == nil {
             settingsWindow.showWindow()
         }
 
