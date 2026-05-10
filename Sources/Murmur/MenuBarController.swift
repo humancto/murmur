@@ -20,9 +20,13 @@ final class MenuBarController {
     func install() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = item.button {
+            // Icon-only on the menu bar. A text title is unnecessary visual
+            // weight and on notch MacBook Pros it pushes the item into the
+            // hidden overflow. The detailed name lives in the dropdown menu
+            // and the tooltip.
             button.image = idleImage()
             button.image?.isTemplate = true
-            button.toolTip = "Murmur — push-to-talk dictation"
+            button.toolTip = "Murmur — push-to-talk dictation · \(MurmurInfo.version)"
         }
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Murmur \(MurmurInfo.version)", action: nil, keyEquivalent: ""))
@@ -36,6 +40,11 @@ final class MenuBarController {
         }
         item.menu = menu
         self.item = item
+
+        // Default-level log so users can confirm the bar item registered
+        // even when filtering finds no `dev.murmur` Logger output (info-
+        // level subsystem logs are restricted by default in macOS 13+).
+        NSLog("Murmur: status item installed — look in your menu bar for 'Murmur' next to the mic icon")
     }
 
     func setModelLoading(_ loading: Bool) {
